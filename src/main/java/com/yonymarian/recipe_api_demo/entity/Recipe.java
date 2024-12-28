@@ -17,7 +17,6 @@ public class Recipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @NonNull
     private UUID id;
 
     @Column(name = "name")
@@ -33,31 +32,29 @@ public class Recipe {
     @Column(name = "total_time")
     private Integer totalTime;
 
-    @NonNull
     @ElementCollection
     @CollectionTable(
             name = "ingredients",
-            joinColumns = @JoinColumn(name = "recipe_id")
+            joinColumns = @JoinColumn(name = "recipe_id", nullable = false)
     )
     @MapKeyColumn(name = "ingredient_name")
-    @Column(name = "ingredient_amount")
+    @Column(name = "ingredient_amount", nullable = false)
     private Map<String, String> ingredients;
 
-    @NonNull
     @ElementCollection
     @CollectionTable(
             name = "steps",
-            joinColumns = @JoinColumn(name = "recipe_id")
+            joinColumns = @JoinColumn(name = "recipe_id", nullable = false)
     )
-    @OrderColumn(name = "step_number")
-    @Column(name = "step_text")
+    @OrderColumn(name = "step_number", nullable = false)
+    @Column(name = "step_text", nullable = false)
     private List<String> steps;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "recipe_tag",
-            joinColumns = @JoinColumn(name = "recipe_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
+            joinColumns = @JoinColumn(name = "recipe_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "tag_id", nullable = false)
     )
     private Set<Tag> tags;
 }
