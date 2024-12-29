@@ -2,6 +2,7 @@ package com.yonymarian.recipe_api_demo.entity;
 
 import com.yonymarian.recipe_api_demo.utils.Difficulty;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -12,6 +13,7 @@ import java.util.UUID;
 
 @Data
 @Entity
+@Builder
 @Table(name = "recipe")
 public class Recipe {
 
@@ -19,19 +21,24 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @NonNull
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
+    @NonNull
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
-    private String author;
+    private User author;
 
     @Column(name = "difficulty")
     private Difficulty difficulty;
 
+    //TODO: ensure minimum of 5 min
+    @NonNull
     @Column(name = "total_time")
     private Integer totalTime;
 
+    @NonNull
     @ElementCollection
     @CollectionTable(
             name = "ingredients",
@@ -41,6 +48,7 @@ public class Recipe {
     @Column(name = "ingredient_amount", nullable = false)
     private Map<String, String> ingredients;
 
+    @NonNull
     @ElementCollection
     @CollectionTable(
             name = "steps",

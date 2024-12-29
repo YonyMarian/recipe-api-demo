@@ -1,6 +1,7 @@
 package com.yonymarian.recipe_api_demo.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Set;
@@ -8,6 +9,7 @@ import java.util.UUID;
 
 @Data
 @Entity
+@Builder
 @Table(name = "user")
 public class User {
 
