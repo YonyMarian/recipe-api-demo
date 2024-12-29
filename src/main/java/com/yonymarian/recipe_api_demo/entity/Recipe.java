@@ -52,7 +52,7 @@ public class Recipe {
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
-            name = "recipe_tag",
+            name = "tags",
             joinColumns = @JoinColumn(name = "recipe_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "tag_id", nullable = false)
     )
