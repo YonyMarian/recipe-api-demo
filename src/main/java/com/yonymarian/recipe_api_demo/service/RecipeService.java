@@ -51,12 +51,12 @@ public class RecipeService {
         return recipeRepository.findByName(name);
     }
 
-    public List<Recipe> getRecipesByNameAndAuthor(String name, String author) {
-        return recipeRepository.findByNameAndAuthor(name, author);
+    public List<Recipe> getRecipesByNameAndAuthor(String name, User author) {
+        return recipeRepository.findByNameAndAuthor(name, author.getName());
     }
 
-    public List<Recipe> getRecipesByAuthor(String author) {
-        return recipeRepository.findByAuthor(author);
+    public List<Recipe> getRecipesByAuthor(User author) {
+        return recipeRepository.findByAuthor(author.getName());
     }
 
     public List<Recipe> getRecipesByDifficulty(String difficulty) {

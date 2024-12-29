@@ -9,8 +9,8 @@ import java.util.UUID;
 public interface RecipeRepository extends JpaRepository<Recipe, UUID> {
 
     public List<Recipe> findByName(String name);
-    public List<Recipe> findByNameAndAuthor(String name, String author);
-    public List<Recipe> findByAuthor(String author);
+    public List<Recipe> findByNameAndAuthor(String name, String authorName);
+    public List<Recipe> findByAuthor(String authorName);
     public List<Recipe> findByDifficulty(String difficulty);
     public List<Recipe> findByIngredients_IngredientNameIn(List<String> ingredientNames);
     public List<Recipe> findByTags_TagNameIn(List<String> tags);
