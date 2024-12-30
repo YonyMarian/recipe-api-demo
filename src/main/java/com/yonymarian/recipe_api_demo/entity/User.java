@@ -3,6 +3,7 @@ package com.yonymarian.recipe_api_demo.entity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 
 import java.util.Set;
 import java.util.UUID;
@@ -17,6 +18,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @NonNull
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
