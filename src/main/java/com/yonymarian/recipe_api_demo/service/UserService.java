@@ -48,11 +48,11 @@ public class UserService {
         return safeSearchForUser(userId);
     }
 
-    public List<User> getUserByName(String name) {
+    public List<User> getUsersByName(String name) {
         return userRepository.findByName(name);
     }
     
-    public List<User> getUserByRecipeMade(Recipe recipe) {
+    public List<User> getUsersByRecipeMade(Recipe recipe) {
         return userRepository.findByRecipes_Name(recipe.getName());
     }
 
