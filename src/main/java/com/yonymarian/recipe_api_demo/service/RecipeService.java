@@ -38,7 +38,7 @@ public class RecipeService {
         } catch (Exception e) {
             throw new ApiException("Some parameter was improperly passed: " + e.getMessage());
         }
-        return recipe;
+        return recipeRepository.save(recipe);
     }
 
     //Read
@@ -77,16 +77,16 @@ public class RecipeService {
     public Recipe updateRecipeMetadata(UUID recipeId, String newName, User newAuthor, Difficulty newDifficulty, Integer newTotalTime) {
         Recipe recipeToUpdate = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new ApiException("Could not find a recipe with the provided ID"));
-        if (newName != null) {
+        if (newName != null && !newName.isEmpty()) {
             recipeToUpdate.setName(newName);
         }
-        if (newAuthor != null) {
+        if (newAuthor != null && !newAuthor.getName().isEmpty()) {
             recipeToUpdate.setAuthor(newAuthor);
         }
         if (newDifficulty != null) {
             recipeToUpdate.setDifficulty(newDifficulty);
         }
-        if (newTotalTime != null) {
+        if (newTotalTime != null && newTotalTime > 0) {
             recipeToUpdate.setTotalTime(newTotalTime);
         }
         return recipeRepository.save(recipeToUpdate);
