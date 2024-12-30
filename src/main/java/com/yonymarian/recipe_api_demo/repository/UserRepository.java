@@ -9,6 +9,6 @@ import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
 
-    public List<User> findByName();
-    public List<User> findByRecipes_Name();
+    public List<User> findByName(String name);
+    public List<User> findByRecipes_Name(String recipeName);
 }
