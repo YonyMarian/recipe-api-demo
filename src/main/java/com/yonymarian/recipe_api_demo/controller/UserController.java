@@ -24,13 +24,13 @@ public class UserController {
         return ResponseEntity.ok(targetUser);
     }
 
-    @GetMapping("/search")
+    @GetMapping("/search/by-name")
     public ResponseEntity<List<User>> getUsersByName(@RequestParam String name) {
         List<User> targetUsers = userService.getUsersByName(name);
         return ResponseEntity.ok(targetUsers);
     }
 
-    @GetMapping("/search")
+    @GetMapping("/search/by-recipe")
     public ResponseEntity<List<User>> getUsersByRecipeMade(@RequestBody Recipe recipe) {
         List<User> targetUsers = userService.getUsersByRecipeMade(recipe);
         return ResponseEntity.ok(targetUsers);
