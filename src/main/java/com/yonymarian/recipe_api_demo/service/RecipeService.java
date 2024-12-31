@@ -5,6 +5,7 @@ import com.yonymarian.recipe_api_demo.entity.Tag;
 import com.yonymarian.recipe_api_demo.entity.User;
 import com.yonymarian.recipe_api_demo.repository.RecipeRepository;
 import com.yonymarian.recipe_api_demo.repository.TagRepository;
+import com.yonymarian.recipe_api_demo.repository.UserRepository;
 import com.yonymarian.recipe_api_demo.utils.Difficulty;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final TagRepository tagRepository;
+    private final UserRepository userRepository;
 
     //Helper methods
     private Recipe safeSearchForRecipe(UUID recipeId) {
@@ -31,12 +33,12 @@ public class RecipeService {
     }
 
     //Create
-    public Recipe createRecipe(String name, User author, Difficulty difficulty, Integer totalTime, Map<String, String> ingredients, List<String> steps, Set<Tag> tags) {
+    public Recipe createRecipe(String name, UUID authorId, Difficulty difficulty, Integer totalTime, Map<String, String> ingredients, List<String> steps, Set<Tag> tags) {
         Recipe recipe;
         try {
             recipe = recipeRepository.save(Recipe.builder()
                     .name(name)
-                    .author(author)
+                    .author(userRepository.findById(authorId).get())
                     .difficulty(Objects.requireNonNullElse(difficulty, Difficulty.NONE_PROVIDED))
                     .totalTime(totalTime)
                     .ingredients(ingredients)

@@ -5,6 +5,7 @@ import com.yonymarian.recipe_api_demo.entity.Recipe;
 import com.yonymarian.recipe_api_demo.entity.User;
 import com.yonymarian.recipe_api_demo.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserController {
     private UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable UUID id) {

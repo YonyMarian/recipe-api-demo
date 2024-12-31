@@ -7,12 +7,12 @@ import com.yonymarian.recipe_api_demo.entity.User;
 import com.yonymarian.recipe_api_demo.service.RecipeService;
 import com.yonymarian.recipe_api_demo.utils.Difficulty;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -21,6 +21,11 @@ import java.util.UUID;
 public class RecipeController {
 
     private RecipeService recipeService;
+
+    @Autowired
+    public RecipeController(RecipeService recipeService) {
+        this.recipeService = recipeService;
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Recipe> getRecipeById(@PathVariable UUID id) {

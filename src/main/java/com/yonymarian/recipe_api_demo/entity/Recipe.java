@@ -4,6 +4,7 @@ import com.yonymarian.recipe_api_demo.utils.Difficulty;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class Recipe {
 
     @NonNull
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "app_user_id", nullable = false)
     private User author;
 
     @Column(name = "difficulty")
