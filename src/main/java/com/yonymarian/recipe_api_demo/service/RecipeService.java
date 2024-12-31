@@ -97,12 +97,14 @@ public class RecipeService {
         return recipeRepository.save(recipeToUpdate);
     }
 
-    public Recipe addOrEditIngredients(UUID recipeId, Map<String, String> newIngredients) {
+    public Recipe addOrEditIngredients(UUID recipeId, List<String> ingredientNames, List<String> ingredientAmounts) {
         Recipe recipeToUpdate = safeSearchForRecipe(recipeId);
-        if (newIngredients != null) {
-            newIngredients.forEach((ingredient, amount) -> {
+        if (ingredientAmounts != null && ingredientNames != null) {
+            for (int i = 0; i < ingredientNames.size(); i++) {
+                String ingredient = ingredientNames.get(i);
+                String amount = ingredientAmounts.get(i);
                 recipeToUpdate.getIngredients().put(ingredient, amount);
-            });
+            }
         }
         return recipeRepository.save(recipeToUpdate);
     }
@@ -134,11 +136,21 @@ public class RecipeService {
         return recipeRepository.save(recipeToUpdate);
     }
 
-    public Recipe addTags(UUID recipeId, Set<Tag> newTags) {
+    public Recipe addTags(UUID recipeId, List<String> newTagNames) {
         Recipe recipeToUpdate = safeSearchForRecipe(recipeId);
-        if (newTags != null) {
-            newTags.forEach((newTag) -> {
-                recipeToUpdate.getTags().add(newTag);
+        if (newTagNames != null) {
+            newTagNames.forEach((newTagName) -> {
+                //attempt to search for a tag with the given name
+                List<Tag> newTagWrapper = tagRepository.findByName(newTagName);
+                if (newTagWrapper.isEmpty()) { //if a name is not found, then:
+                    newTagWrapper.add( //create a new tag within the wrapper
+                            tagRepository.save( //and save it to the Tag Repository
+                                    new Tag(newTagName.toUpperCase()
+                                    )
+                            )
+                    );
+                }
+                recipeToUpdate.getTags().add(newTagWrapper.getFirst());
             });
         }
         return recipeRepository.save(recipeToUpdate);
