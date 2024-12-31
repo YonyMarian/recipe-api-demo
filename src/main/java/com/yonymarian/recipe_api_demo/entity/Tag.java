@@ -23,6 +23,6 @@ public class Tag {
     @ColumnTransformer(read = "UPPER(name)", forColumn = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "recipe")
+    @ManyToMany(mappedBy = "tags")
     private Set<Recipe> recipes;
 }

@@ -21,6 +21,15 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final TagRepository tagRepository;
 
+    //Helper methods
+    private Recipe safeSearchForRecipe(UUID recipeId) {
+        if (recipeId == null) {
+            throw new ApiException("ID cannot be null");
+        }
+        return recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new ApiException("Could not find a recipe with the provided ID"));
+    }
+
     //Create
     public Recipe createRecipe(String name, User author, Difficulty difficulty, Integer totalTime, Map<String, String> ingredients, List<String> steps, Set<Tag> tags) {
         Recipe recipe;
@@ -43,8 +52,7 @@ public class RecipeService {
 
     //Read
     public Recipe getRecipeById(UUID id) {
-        return recipeRepository.findById(id)
-                .orElseThrow(() -> new ApiException("Could not find a recipe with the provided ID"));
+        return safeSearchForRecipe(id);
     }
 
     public List<Recipe> getRecipesByName(String name) {
@@ -52,14 +60,14 @@ public class RecipeService {
     }
 
     public List<Recipe> getRecipesByNameAndAuthor(String name, User author) {
-        return recipeRepository.findByNameAndAuthor(name, author.getName());
+        return recipeRepository.findByNameAndAuthor(name, author);
     }
 
     public List<Recipe> getRecipesByAuthor(User author) {
-        return recipeRepository.findByAuthor(author.getName());
+        return recipeRepository.findByAuthor(author);
     }
 
-    public List<Recipe> getRecipesByDifficulty(String difficulty) {
+    public List<Recipe> getRecipesByDifficulty(Difficulty difficulty) {
         return recipeRepository.findByDifficulty(difficulty);
     }
 
@@ -74,14 +82,11 @@ public class RecipeService {
     //Update
 
     //updates single-field columns
-    public Recipe updateRecipeMetadata(UUID recipeId, String newName, User newAuthor, Difficulty newDifficulty, Integer newTotalTime) {
-        Recipe recipeToUpdate = recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new ApiException("Could not find a recipe with the provided ID"));
+    //
+    public Recipe updateRecipeMetadata(UUID recipeId, String newName, Difficulty newDifficulty, Integer newTotalTime) {
+        Recipe recipeToUpdate = safeSearchForRecipe(recipeId);
         if (newName != null && !newName.isEmpty()) {
             recipeToUpdate.setName(newName);
-        }
-        if (newAuthor != null && !newAuthor.getName().isEmpty()) {
-            recipeToUpdate.setAuthor(newAuthor);
         }
         if (newDifficulty != null) {
             recipeToUpdate.setDifficulty(newDifficulty);
@@ -93,8 +98,7 @@ public class RecipeService {
     }
 
     public Recipe addOrEditIngredients(UUID recipeId, Map<String, String> newIngredients) {
-        Recipe recipeToUpdate = recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new ApiException("Could not find a recipe with the provided ID"));
+        Recipe recipeToUpdate = safeSearchForRecipe(recipeId);
         if (newIngredients != null) {
             newIngredients.forEach((ingredient, amount) -> {
                 recipeToUpdate.getIngredients().put(ingredient, amount);
@@ -104,8 +108,7 @@ public class RecipeService {
     }
 
     public Recipe deleteIngredient(UUID recipeId, String ingredientName) {
-        Recipe recipeToUpdate = recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new ApiException("Could not find a recipe with the provided ID"));
+        Recipe recipeToUpdate = safeSearchForRecipe(recipeId);
         if (ingredientName != null && !ingredientName.isEmpty()) {
             recipeToUpdate.getIngredients().remove(ingredientName);
         }
@@ -113,8 +116,7 @@ public class RecipeService {
     }
 
     public Recipe addStep(UUID recipeId, String newStep, int index) {
-        Recipe recipeToUpdate = recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new ApiException("Could not find a recipe with the provided ID"));
+        Recipe recipeToUpdate = safeSearchForRecipe(recipeId);
         if (index <= 0) { index = 0; }
         if (index >= recipeToUpdate.getSteps().size()) { index = recipeToUpdate.getSteps().size() - 1; }
         if (newStep != null) {
@@ -124,8 +126,7 @@ public class RecipeService {
     }
 
     public Recipe deleteStep(UUID recipeId, int index) {
-        Recipe recipeToUpdate = recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new ApiException("Could not find a recipe with the provided ID"));
+        Recipe recipeToUpdate = safeSearchForRecipe(recipeId);
         if (index <= 0 || index >= recipeToUpdate.getSteps().size()) {
             throw new ApiException("No step exists at this index");
         }
@@ -134,8 +135,7 @@ public class RecipeService {
     }
 
     public Recipe addTags(UUID recipeId, Set<Tag> newTags) {
-        Recipe recipeToUpdate = recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new ApiException("Could not find a recipe with the provided ID"));
+        Recipe recipeToUpdate = safeSearchForRecipe(recipeId);
         if (newTags != null) {
             newTags.forEach((newTag) -> {
                 recipeToUpdate.getTags().add(newTag);
@@ -145,8 +145,7 @@ public class RecipeService {
     }
 
     public Recipe removeTag(UUID recipeId, UUID tagId) {
-        Recipe recipeToUpdate = recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new ApiException("Could not find a recipe with the provided ID"));
+        Recipe recipeToUpdate = safeSearchForRecipe(recipeId);
         Tag tagToRemove = tagRepository.findById(tagId)
                 .orElseThrow(() -> new ApiException("Could not find a tag with the provided ID"));
         recipeToUpdate.getTags().remove(tagToRemove);
@@ -155,8 +154,7 @@ public class RecipeService {
 
     //Delete
     public Recipe deleteRecipe(UUID recipeId) {
-        Recipe recipeToDelete = recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new ApiException("Could not find a recipe with the provided ID"));
+        Recipe recipeToDelete = safeSearchForRecipe(recipeId);
         recipeRepository.delete(recipeToDelete);
         return recipeToDelete;
     }

@@ -22,7 +22,7 @@ public class User {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "author")
     private Set<Recipe> recipes;
 
 
