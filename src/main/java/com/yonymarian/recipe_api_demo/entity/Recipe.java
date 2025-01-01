@@ -2,10 +2,7 @@ package com.yonymarian.recipe_api_demo.entity;
 
 import com.yonymarian.recipe_api_demo.utils.Difficulty;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 
 import java.util.List;
 import java.util.Map;
@@ -14,6 +11,8 @@ import java.util.UUID;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Table(name = "recipe")
 public class Recipe {

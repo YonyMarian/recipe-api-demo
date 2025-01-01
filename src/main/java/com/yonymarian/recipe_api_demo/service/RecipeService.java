@@ -154,7 +154,7 @@ public class RecipeService {
         if (newTagNames != null) {
             newTagNames.forEach((newTagName) -> {
                 //attempt to search for a tag with the given name
-                Tag newTag = tagRepository.findByName(newTagName)
+                Tag newTag = tagRepository.findByName(newTagName.toUpperCase())
                         .orElse(new Tag(newTagName));
                 recipeToUpdate.getTags().add(newTag);
             });
