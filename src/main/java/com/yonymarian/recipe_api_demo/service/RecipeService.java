@@ -35,7 +35,9 @@ public class RecipeService {
     private Set<Tag> createTagSetFromNames(Set<String> tagNames) {
         Set<Tag> result = new HashSet<>();
         tagNames.forEach(tagName -> {
-            result.add(new Tag(tagName.toUpperCase()));
+            Tag tagToAdd = tagRepository.findByName(tagName)
+                    .orElse(new Tag(tagName));
+            result.add(tagToAdd);
         });
         return result;
     }
@@ -48,7 +50,7 @@ public class RecipeService {
             recipe = recipeRepository.save(Recipe.builder()
                     .name(name)
                     .author(userRepository.findById(authorId).orElseThrow(() -> new ApiException("could not find a user with the provided ID")))
-                    .difficulty(Objects.requireNonNullElse(Difficulty.valueOf(difficulty), Difficulty.NONE_PROVIDED))
+                    .difficulty(difficulty == null ? Difficulty.NONE_PROVIDED : Difficulty.valueOf(difficulty))
                     .totalTime(totalTime)
                     .ingredients(ingredients)
                     .steps(steps)
@@ -56,7 +58,7 @@ public class RecipeService {
                     .build()
             );
         } catch (Exception e) {
-            throw new ApiException("Some parameter was improperly passed: " + e.getMessage());
+            throw e;
         }
         return recipeRepository.save(recipe);
     }
@@ -152,16 +154,9 @@ public class RecipeService {
         if (newTagNames != null) {
             newTagNames.forEach((newTagName) -> {
                 //attempt to search for a tag with the given name
-                List<Tag> newTagWrapper = tagRepository.findByName(newTagName);
-                if (newTagWrapper.isEmpty()) { //if a name is not found, then:
-                    newTagWrapper.add( //create a new tag within the wrapper
-                            tagRepository.save( //and save it to the Tag Repository
-                                    new Tag(newTagName.toUpperCase()
-                                    )
-                            )
-                    );
-                }
-                recipeToUpdate.getTags().add(newTagWrapper.getFirst());
+                Tag newTag = tagRepository.findByName(newTagName)
+                        .orElse(new Tag(newTagName));
+                recipeToUpdate.getTags().add(newTag);
             });
         }
         return recipeRepository.save(recipeToUpdate);
