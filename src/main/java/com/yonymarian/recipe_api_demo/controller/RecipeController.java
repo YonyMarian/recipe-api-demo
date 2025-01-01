@@ -1,8 +1,8 @@
 package com.yonymarian.recipe_api_demo.controller;
 
 
+import com.yonymarian.recipe_api_demo.dto.RecipeDto;
 import com.yonymarian.recipe_api_demo.entity.Recipe;
-import com.yonymarian.recipe_api_demo.entity.Tag;
 import com.yonymarian.recipe_api_demo.entity.User;
 import com.yonymarian.recipe_api_demo.service.RecipeService;
 import com.yonymarian.recipe_api_demo.utils.Difficulty;
@@ -71,16 +71,16 @@ public class RecipeController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Recipe> createRecipe(@RequestBody Recipe recipePayload) {
+    public ResponseEntity<Recipe> createRecipe(@RequestBody RecipeDto recipePayload) {
         return new ResponseEntity<>(
                 recipeService.createRecipe(
                     recipePayload.getName(),
-                    recipePayload.getAuthor(),
+                    recipePayload.getAuthorId(),
                     recipePayload.getDifficulty(),
                     recipePayload.getTotalTime(),
                     recipePayload.getIngredients(),
                     recipePayload.getSteps(),
-                    recipePayload.getTags()
+                    recipePayload.getTagNames()
             ), HttpStatus.CREATED
         );
     }

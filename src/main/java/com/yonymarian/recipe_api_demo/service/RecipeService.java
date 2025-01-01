@@ -41,18 +41,18 @@ public class RecipeService {
     }
 
     //Create
-    public Recipe createRecipe(String name, User author, Difficulty difficulty, Integer totalTime, Map<String, String> ingredients, List<String> steps, Set<Tag> tags) {
+    public Recipe createRecipe(String name, UUID authorId, String difficulty, Integer totalTime, Map<String, String> ingredients, List<String> steps, Set<String> tagNames) {
         Recipe recipe;
-        //Set<Tag> tagSet = tagNames.isEmpty() ? new HashSet<Tag>() : createTagSetFromNames(tagNames);
+        Set<Tag> tagSet = tagNames.isEmpty() ? new HashSet<Tag>() : createTagSetFromNames(tagNames);
         try {
             recipe = recipeRepository.save(Recipe.builder()
                     .name(name)
-                    .author(author)
-                    .difficulty(Objects.requireNonNullElse(difficulty, Difficulty.NONE_PROVIDED))
+                    .author(userRepository.findById(authorId).orElseThrow(() -> new ApiException("could not find a user with the provided ID")))
+                    .difficulty(Objects.requireNonNullElse(Difficulty.valueOf(difficulty), Difficulty.NONE_PROVIDED))
                     .totalTime(totalTime)
                     .ingredients(ingredients)
                     .steps(steps)
-                    .tags(Objects.requireNonNullElse(tags, new HashSet<Tag>()))
+                    .tags(tagSet)
                     .build()
             );
         } catch (Exception e) {
