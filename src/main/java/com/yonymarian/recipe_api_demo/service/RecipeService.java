@@ -32,18 +32,27 @@ public class RecipeService {
                 .orElseThrow(() -> new ApiException("Could not find a recipe with the provided ID"));
     }
 
+    private Set<Tag> createTagSetFromNames(Set<String> tagNames) {
+        Set<Tag> result = new HashSet<>();
+        tagNames.forEach(tagName -> {
+            result.add(new Tag(tagName.toUpperCase()));
+        });
+        return result;
+    }
+
     //Create
-    public Recipe createRecipe(String name, UUID authorId, Difficulty difficulty, Integer totalTime, Map<String, String> ingredients, List<String> steps, Set<Tag> tags) {
+    public Recipe createRecipe(String name, User author, Difficulty difficulty, Integer totalTime, Map<String, String> ingredients, List<String> steps, Set<Tag> tags) {
         Recipe recipe;
+        //Set<Tag> tagSet = tagNames.isEmpty() ? new HashSet<Tag>() : createTagSetFromNames(tagNames);
         try {
             recipe = recipeRepository.save(Recipe.builder()
                     .name(name)
-                    .author(userRepository.findById(authorId).get())
+                    .author(author)
                     .difficulty(Objects.requireNonNullElse(difficulty, Difficulty.NONE_PROVIDED))
                     .totalTime(totalTime)
                     .ingredients(ingredients)
                     .steps(steps)
-                    .tags(Objects.requireNonNullElse(tags, new HashSet<>()))
+                    .tags(Objects.requireNonNullElse(tags, new HashSet<Tag>()))
                     .build()
             );
         } catch (Exception e) {

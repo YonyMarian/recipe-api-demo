@@ -4,5 +4,9 @@ public enum Difficulty {
     BEGINNER,
     INTERMEDIATE,
     ADVANCED,
-    NONE_PROVIDED
+    NONE_PROVIDED;
+
+    public String getDifficulty() {
+        return this.name();
+    }
 }

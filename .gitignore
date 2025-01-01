@@ -6,6 +6,9 @@ target/
 !**/src/main/resources/application.properties
 src/main/resources/application.properties
 
+### db ###
+test.db.mv.db
+
 ### STS ###
 .apt_generated
 .classpath

@@ -25,4 +25,5 @@ public class Tag {
 
     @ManyToMany(mappedBy = "tags")
     private Set<Recipe> recipes;
+
 }
