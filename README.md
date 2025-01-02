@@ -9,7 +9,7 @@ cook time, difficulty, instructions, and even tags.
 ## Project Specifications
 - Language: **Java 21**
   - Framework: **Spring** (*with Spring Boot 3.4.1*)
-- Made in: IntelliJ IDEA
+- Made in: **IntelliJ IDEA**
 - CLI: **Bash** (*via Git Bash*)
 ### Other Tools
 - Build: **Maven**
