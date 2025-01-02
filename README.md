@@ -15,6 +15,7 @@ cook time, difficulty, instructions, and even tags.
 - Build: **Maven**
 - Database: **H2** (*persisted locally*)
   - ORM: **Hibernate**
+- Requests: **Postman**
 ----
 ## Database Operations
 ### User
