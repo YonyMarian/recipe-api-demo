@@ -1,10 +1,12 @@
 # **ReciFree: A Recipe API Demonstration**
-Yony Marian
+Yony Marian 
+
 ## Project Description
 A RESTful API built with Spring Boot demonstrating various
 CRUD operations, wherein theoretical "Users" can post
 "Recipes" with expected specifications like ingredients,
 cook time, difficulty, instructions, and even tags.
+
 ----
 ## Project Specifications
 - Language: **Java 21**
